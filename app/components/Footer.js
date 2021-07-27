@@ -1,9 +1,10 @@
 import React from "react"
+import { Link } from "react-router-dom"
 
 export function Footer() {
   return (
     <footer className="border-top text-center small text-muted py-3">
-        <p><a href="/" className="mx-1">Home</a> | <a className="mx-1" href="/about-us">About Us</a> | <a className="mx-1" href="/terms">Terms</a></p>
+        <p><Link to="/" className="mx-1">Home</Link> | <Link className="mx-1" to="/about">About Us</Link> | <Link className="mx-1" to="/terms">Terms</Link></p>
         <p className="m-0">Copyright &copy; 2020 <a href="/" className="text-muted">ComplexApp</a>. All rights reserved.</p>
     </footer>
   )
