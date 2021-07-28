@@ -1,9 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 import axios from "axios"
 
 import { Page } from "./Page"
 
 export function HomeGuest() {
+    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
     async function handleSubmit(e) {
         e.preventDefault()
 
@@ -11,9 +15,9 @@ export function HomeGuest() {
             const response = await axios.post(
                 "http://localhost:8080/register",
                 {
-                    username: "test2",
-                    email: "test2@test.com",
-                    password: "qwerty123456",
+                    username,
+                    email,
+                    password,
                 }
             )
 
@@ -52,6 +56,8 @@ export function HomeGuest() {
                                 type="text"
                                 placeholder="Pick a username"
                                 autoComplete="off"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
                         <div className="form-group">
@@ -68,6 +74,8 @@ export function HomeGuest() {
                                 type="text"
                                 placeholder="you@example.com"
                                 autoComplete="off"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div className="form-group">
@@ -84,6 +92,8 @@ export function HomeGuest() {
                                 type="password"
                                 placeholder="Create a password"
                                 autoComplete="off"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
                         <button
