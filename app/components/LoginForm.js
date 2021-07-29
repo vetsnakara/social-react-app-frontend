@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 
-export const LoginForm = () => {
+export const LoginForm = ({ onLogin }) => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
@@ -9,13 +9,19 @@ export const LoginForm = () => {
         e.preventDefault()
 
         try {
-            const response = await axios.post("http://localhost:8080/login", {
+            const { data } = await axios.post("http://localhost:8080/login", {
                 username,
                 password,
             })
 
-            if (response.data) {
-                console.log(response.data)
+            if (data) {
+                const { token, username, avatar } = data
+
+                localStorage.setItem("appToken", token)
+                localStorage.setItem("appAvatar", avatar)
+                localStorage.setItem("appUsername", username)
+
+                onLogin()
             } else {
                 console.log("Incorrect username or password")
             }
