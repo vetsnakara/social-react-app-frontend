@@ -12,14 +12,11 @@ export function HomeGuest() {
         e.preventDefault()
 
         try {
-            const response = await axios.post(
-                "http://localhost:8080/register",
-                {
-                    username,
-                    email,
-                    password,
-                }
-            )
+            const response = await axios.post("/register", {
+                username,
+                email,
+                password,
+            })
 
             console.log("User was successfully created", response)
         } catch (error) {

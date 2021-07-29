@@ -9,7 +9,7 @@ export const LoginForm = ({ onLogin }) => {
         e.preventDefault()
 
         try {
-            const { data } = await axios.post("http://localhost:8080/login", {
+            const { data } = await axios.post("/login", {
                 username,
                 password,
             })
