@@ -2,10 +2,10 @@ import React, { useContext } from "react"
 
 import { Link } from "react-router-dom"
 
-import Context from "../context"
+import { dispatchContext } from "./StateProvider"
 
 export function HeaderLoggedIn() {
-    const { dispatch } = useContext(Context)
+    const dispatch = useContext(dispatchContext)
 
     function handleLogout() {
         localStorage.removeItem("appToken")

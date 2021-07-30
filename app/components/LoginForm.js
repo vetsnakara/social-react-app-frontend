@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react"
 import axios from "axios"
 
-import Context from "../context"
+import { dispatchContext } from "./StateProvider"
 
 export const LoginForm = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
-    const { dispatch } = useContext(Context)
+    const dispatch = useContext(dispatchContext)
 
     async function handleSubmit(e) {
         e.preventDefault()

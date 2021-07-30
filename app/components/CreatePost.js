@@ -3,12 +3,12 @@ import { Redirect } from "react-router-dom"
 
 import axios from "axios"
 
-import Context from "../context"
+import { dispatchContext } from "./StateProvider"
 
 import { Page } from "./Page"
 
 export function CreatePost({ onCreate }) {
-    const { dispatch } = useContext(Context)
+    const dispatch = useContext(dispatchContext)
 
     const [title, setTitle] = useState("")
     const [body, setBody] = useState("")

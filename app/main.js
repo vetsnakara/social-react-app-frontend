@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useReducer } from "react"
+import React, { useState, useEffect, useReducer, useContext } from "react"
 import ReactDOM from "react-dom"
 
 import axios from "axios"
 
-import Context from "./context"
+import { StateProvider, stateContext } from "./components/StateProvider"
 
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 
@@ -20,67 +20,43 @@ import { FlashMessage } from "./components/FlashMessage"
 axios.defaults.baseURL = "http://localhost:8080"
 
 function App() {
-    const initState = {
-        loggedIn: localStorage.getItem("appToken"),
-        flashMessages: [],
-    }
-
-    const [state, dispatch] = useReducer(appReducer, initState)
+    const { loggedIn } = useContext(stateContext)
 
     return (
-        <Context.Provider value={{ dispatch, state }}>
-            <BrowserRouter>
-                <FlashMessage />
+        <BrowserRouter>
+            <FlashMessage />
 
-                <Header />
+            <Header />
 
-                <Switch>
-                    <Route exact path="/">
-                        {state.loggedIn ? <Home /> : <HomeGuest />}
-                    </Route>
-                    <Route path="/post/:id">
-                        <ViewSinglePost />
-                    </Route>
-                    <Route path="/about">
-                        <About />
-                    </Route>
-                    <Route path="/terms">
-                        <Terms />
-                    </Route>
-                    <Route path="/create-post">
-                        <CreatePost />
-                    </Route>
-                </Switch>
+            <Switch>
+                <Route exact path="/">
+                    {loggedIn ? <Home /> : <HomeGuest />}
+                </Route>
+                <Route path="/post/:id">
+                    <ViewSinglePost />
+                </Route>
+                <Route path="/about">
+                    <About />
+                </Route>
+                <Route path="/terms">
+                    <Terms />
+                </Route>
+                <Route path="/create-post">
+                    <CreatePost />
+                </Route>
+            </Switch>
 
-                <Footer />
-            </BrowserRouter>
-        </Context.Provider>
+            <Footer />
+        </BrowserRouter>
     )
 }
 
-function appReducer(state, action) {
-    switch (action.type) {
-        case "login":
-            return {
-                ...state,
-                loggedIn: true,
-            }
-        case "logout":
-            return {
-                ...state,
-                loggedIn: false,
-            }
-        case "flashMessage":
-            return {
-                ...state,
-                flashMessages: state.flashMessages.concat(action.value),
-            }
-        default:
-            return state
-    }
-}
-
-ReactDOM.render(<App />, document.querySelector("#root"))
+ReactDOM.render(
+    <StateProvider>
+        <App />
+    </StateProvider>,
+    document.querySelector("#root")
+)
 
 if (module.hot) {
     module.hot.accept()

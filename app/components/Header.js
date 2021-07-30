@@ -4,12 +4,10 @@ import { Link } from "react-router-dom"
 import { LoginForm } from "./LoginForm"
 import { HeaderLoggedIn } from "./HeaderLoggedIn"
 
-import Context from "../context"
+import { stateContext } from "./StateProvider"
 
 export function Header() {
-    const {
-        state: { loggedIn },
-    } = useContext(Context)
+    const { loggedIn } = useContext(stateContext)
 
     return (
         <header className="header-bar bg-primary mb-3">
