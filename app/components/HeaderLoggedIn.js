@@ -1,14 +1,18 @@
-import React from "react"
+import React, { useContext } from "react"
 
 import { Link } from "react-router-dom"
 
-export function HeaderLoggedIn({ onLogout }) {
+import Context from "../context"
+
+export function HeaderLoggedIn() {
+    const { setLoggedIn } = useContext(Context)
+
     function handleLogout() {
         localStorage.removeItem("appToken")
         localStorage.removeItem("appUsername")
         localStorage.removeItem("appAvatar")
 
-        onLogout()
+        setLoggedIn(false)
     }
 
     return (

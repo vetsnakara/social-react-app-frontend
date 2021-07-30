@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import axios from "axios"
 
-export const LoginForm = ({ onLogin }) => {
+import Context from "../context"
+
+export const LoginForm = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+
+    const { setLoggedIn } = useContext(Context)
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -21,7 +25,7 @@ export const LoginForm = ({ onLogin }) => {
                 localStorage.setItem("appAvatar", avatar)
                 localStorage.setItem("appUsername", username)
 
-                onLogin()
+                setLoggedIn(true)
             } else {
                 console.log("Incorrect username or password")
             }

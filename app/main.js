@@ -3,6 +3,8 @@ import ReactDOM from "react-dom"
 
 import axios from "axios"
 
+import Context from "./context"
+
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 
 import { Header } from "./components/Header"
@@ -21,8 +23,6 @@ function App() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [flashMessages, setFlashMessages] = useState([])
 
-    console.log("messages", flashMessages)
-
     function addFlashMessage(msg) {
         setFlashMessages((prev) => prev.concat(msg))
     }
@@ -33,31 +33,33 @@ function App() {
     }, [])
 
     return (
-        <BrowserRouter>
-            <FlashMessage messages={flashMessages} />
+        <Context.Provider value={{ addFlashMessage, loggedIn, setLoggedIn }}>
+            <BrowserRouter>
+                <FlashMessage messages={flashMessages} />
 
-            <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+                <Header />
 
-            <Switch>
-                <Route exact path="/">
-                    {loggedIn ? <Home /> : <HomeGuest />}
-                </Route>
-                <Route path="/post/:id">
-                    <ViewSinglePost />
-                </Route>
-                <Route path="/about">
-                    <About />
-                </Route>
-                <Route path="/terms">
-                    <Terms />
-                </Route>
-                <Route path="/create-post">
-                    <CreatePost onCreate={addFlashMessage} />
-                </Route>
-            </Switch>
+                <Switch>
+                    <Route exact path="/">
+                        {loggedIn ? <Home /> : <HomeGuest />}
+                    </Route>
+                    <Route path="/post/:id">
+                        <ViewSinglePost />
+                    </Route>
+                    <Route path="/about">
+                        <About />
+                    </Route>
+                    <Route path="/terms">
+                        <Terms />
+                    </Route>
+                    <Route path="/create-post">
+                        <CreatePost />
+                    </Route>
+                </Switch>
 
-            <Footer />
-        </BrowserRouter>
+                <Footer />
+            </BrowserRouter>
+        </Context.Provider>
     )
 }
 

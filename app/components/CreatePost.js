@@ -1,11 +1,15 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Redirect } from "react-router-dom"
 
 import axios from "axios"
 
+import Context from "../context"
+
 import { Page } from "./Page"
 
 export function CreatePost({ onCreate }) {
+    const { addFlashMessage } = useContext(Context)
+
     const [title, setTitle] = useState("")
     const [body, setBody] = useState("")
     const [postId, setPostId] = useState(null)
@@ -20,7 +24,7 @@ export function CreatePost({ onCreate }) {
                 token: localStorage.getItem("appToken"),
             })
 
-            onCreate("You successfully created a post")
+            addFlashMessage("You successfully created a post!!!")
 
             setPostId(postId)
         } catch (error) {
