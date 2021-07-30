@@ -5,14 +5,14 @@ import { Link } from "react-router-dom"
 import Context from "../context"
 
 export function HeaderLoggedIn() {
-    const { setLoggedIn } = useContext(Context)
+    const { dispatch } = useContext(Context)
 
     function handleLogout() {
         localStorage.removeItem("appToken")
         localStorage.removeItem("appUsername")
         localStorage.removeItem("appAvatar")
 
-        setLoggedIn(false)
+        dispatch({ type: "logout" })
     }
 
     return (

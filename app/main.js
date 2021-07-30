@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useReducer } from "react"
 import ReactDOM from "react-dom"
 
 import axios from "axios"
@@ -20,28 +20,23 @@ import { FlashMessage } from "./components/FlashMessage"
 axios.defaults.baseURL = "http://localhost:8080"
 
 function App() {
-    const [loggedIn, setLoggedIn] = useState(false)
-    const [flashMessages, setFlashMessages] = useState([])
-
-    function addFlashMessage(msg) {
-        setFlashMessages((prev) => prev.concat(msg))
+    const initState = {
+        loggedIn: localStorage.getItem("appToken"),
+        flashMessages: [],
     }
 
-    useEffect(() => {
-        const isLoggedIn = localStorage.getItem("appToken")
-        setLoggedIn(isLoggedIn)
-    }, [])
+    const [state, dispatch] = useReducer(appReducer, initState)
 
     return (
-        <Context.Provider value={{ addFlashMessage, loggedIn, setLoggedIn }}>
+        <Context.Provider value={{ dispatch, state }}>
             <BrowserRouter>
-                <FlashMessage messages={flashMessages} />
+                <FlashMessage />
 
                 <Header />
 
                 <Switch>
                     <Route exact path="/">
-                        {loggedIn ? <Home /> : <HomeGuest />}
+                        {state.loggedIn ? <Home /> : <HomeGuest />}
                     </Route>
                     <Route path="/post/:id">
                         <ViewSinglePost />
@@ -61,6 +56,28 @@ function App() {
             </BrowserRouter>
         </Context.Provider>
     )
+}
+
+function appReducer(state, action) {
+    switch (action.type) {
+        case "login":
+            return {
+                ...state,
+                loggedIn: true,
+            }
+        case "logout":
+            return {
+                ...state,
+                loggedIn: false,
+            }
+        case "flashMessage":
+            return {
+                ...state,
+                flashMessages: state.flashMessages.concat(action.value),
+            }
+        default:
+            return state
+    }
 }
 
 ReactDOM.render(<App />, document.querySelector("#root"))

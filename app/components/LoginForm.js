@@ -7,7 +7,7 @@ export const LoginForm = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
-    const { setLoggedIn } = useContext(Context)
+    const { dispatch } = useContext(Context)
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -25,7 +25,7 @@ export const LoginForm = () => {
                 localStorage.setItem("appAvatar", avatar)
                 localStorage.setItem("appUsername", username)
 
-                setLoggedIn(true)
+                dispatch({ type: "login" })
             } else {
                 console.log("Incorrect username or password")
             }

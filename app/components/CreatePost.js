@@ -8,7 +8,7 @@ import Context from "../context"
 import { Page } from "./Page"
 
 export function CreatePost({ onCreate }) {
-    const { addFlashMessage } = useContext(Context)
+    const { dispatch } = useContext(Context)
 
     const [title, setTitle] = useState("")
     const [body, setBody] = useState("")
@@ -24,7 +24,10 @@ export function CreatePost({ onCreate }) {
                 token: localStorage.getItem("appToken"),
             })
 
-            addFlashMessage("You successfully created a post!!!")
+            dispatch({
+                type: "flashMessage",
+                value: "Post successfully created!!!!!",
+            })
 
             setPostId(postId)
         } catch (error) {

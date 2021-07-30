@@ -7,7 +7,9 @@ import { HeaderLoggedIn } from "./HeaderLoggedIn"
 import Context from "../context"
 
 export function Header() {
-    const { loggedIn } = useContext(Context)
+    const {
+        state: { loggedIn },
+    } = useContext(Context)
 
     return (
         <header className="header-bar bg-primary mb-3">

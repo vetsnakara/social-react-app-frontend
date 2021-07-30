@@ -1,6 +1,12 @@
-import React from "react"
+import React, { useContext } from "react"
 
-export function FlashMessage({ messages = [] }) {
+import Context from "../context"
+
+export function FlashMessage() {
+    const {
+        state: { flashMessages: messages },
+    } = useContext(Context)
+
     return (
         <div className="floating-alerts">
             {messages.map((msg, index) => (
