@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from "react"
+import { useImmerReducer } from "use-immer"
 
 import { appReducer } from "../reducer"
 
@@ -11,7 +12,7 @@ const initState = {
 }
 
 export function StateProvider({ children }) {
-    const [state, dispatch] = useReducer(appReducer, initState)
+    const [state, dispatch] = useImmerReducer(appReducer, initState)
 
     return (
         <stateContext.Provider value={state}>

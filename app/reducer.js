@@ -1,21 +1,13 @@
-export function appReducer(state, action) {
+export function appReducer(draft, action) {
     switch (action.type) {
         case "login":
-            return {
-                ...state,
-                loggedIn: true,
-            }
+            draft.loggedIn = true
+            break
         case "logout":
-            return {
-                ...state,
-                loggedIn: false,
-            }
+            draft.loggedIn = false
+            break
         case "flashMessage":
-            return {
-                ...state,
-                flashMessages: state.flashMessages.concat(action.value),
-            }
-        default:
-            return state
+            draft.flashMessages.push(action.value)
+            break
     }
 }
