@@ -1,10 +1,10 @@
 export function appReducer(draft, action) {
     switch (action.type) {
         case "login":
-            draft.loggedIn = true
+            draft.user = action.value
             break
         case "logout":
-            draft.loggedIn = false
+            draft.user = null
             break
         case "flashMessage":
             draft.flashMessages.push(action.value)

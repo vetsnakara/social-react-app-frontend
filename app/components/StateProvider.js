@@ -7,8 +7,9 @@ const stateContext = createContext()
 const dispatchContext = createContext()
 
 const initState = {
-    loggedIn: localStorage.getItem("appToken"),
+    redirectUrl: null,
     flashMessages: [],
+    user: JSON.parse(localStorage.getItem("user")),
 }
 
 export function StateProvider({ children }) {

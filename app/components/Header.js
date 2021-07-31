@@ -7,7 +7,7 @@ import { HeaderLoggedIn } from "./HeaderLoggedIn"
 import { stateContext } from "./StateProvider"
 
 export function Header() {
-    const { loggedIn } = useContext(stateContext)
+    const { user } = useContext(stateContext)
 
     return (
         <header className="header-bar bg-primary mb-3">
@@ -17,7 +17,7 @@ export function Header() {
                         ComplexApp
                     </Link>
                 </h4>
-                {loggedIn ? <HeaderLoggedIn /> : <LoginForm />}
+                {user ? <HeaderLoggedIn /> : <LoginForm />}
             </div>
         </header>
     )

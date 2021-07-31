@@ -19,13 +19,7 @@ export const LoginForm = () => {
             })
 
             if (data) {
-                const { token, username, avatar } = data
-
-                localStorage.setItem("appToken", token)
-                localStorage.setItem("appAvatar", avatar)
-                localStorage.setItem("appUsername", username)
-
-                dispatch({ type: "login" })
+                dispatch({ type: "login", value: data })
             } else {
                 console.log("Incorrect username or password")
             }

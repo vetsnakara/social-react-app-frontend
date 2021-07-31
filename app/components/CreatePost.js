@@ -3,12 +3,16 @@ import { Redirect } from "react-router-dom"
 
 import axios from "axios"
 
-import { dispatchContext } from "./StateProvider"
+import { dispatchContext, stateContext } from "./StateProvider"
 
 import { Page } from "./Page"
 
 export function CreatePost({ onCreate }) {
     const dispatch = useContext(dispatchContext)
+
+    const {
+        user: { token },
+    } = useContext(stateContext)
 
     const [title, setTitle] = useState("")
     const [body, setBody] = useState("")
@@ -18,10 +22,11 @@ export function CreatePost({ onCreate }) {
         e.preventDefault()
 
         try {
+            console.log(title, body, token)
             const { data: postId } = await axios.post("/create-post", {
                 title,
                 body,
-                token: localStorage.getItem("appToken"),
+                token,
             })
 
             dispatch({

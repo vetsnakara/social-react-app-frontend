@@ -1,13 +1,18 @@
-import React from "react"
+import React, { useCallback, useContext } from "react"
+
+import { stateContext } from "./StateProvider"
 
 import { Page } from "./Page"
 
 export function Home() {
+    const {
+        user: { username },
+    } = useContext(stateContext)
+
     return (
         <Page title="Your Feed">
             <h2 className="text-center">
-                Hello <strong>{localStorage.getItem("appUsername")}</strong>,
-                your feed is empty.
+                Hello <strong>{username}</strong>, your feed is empty.
             </h2>
             <p className="lead text-muted text-center">
                 Your feed displays the latest posts from the people you follow.

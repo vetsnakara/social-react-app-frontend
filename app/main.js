@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useReducer, useContext } from "react"
+import React from "react"
 import ReactDOM from "react-dom"
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 
 import axios from "axios"
 
-import { StateProvider, stateContext } from "./components/StateProvider"
-
-import { BrowserRouter, Switch, Route } from "react-router-dom"
+import { StateProvider } from "./components/StateProvider"
+import { useLocalStorage } from "./hooks/useLocalStorage"
 
 import { Header } from "./components/Header"
 import { Footer } from "./components/Footer"
@@ -16,11 +16,12 @@ import { Home } from "./components/Home"
 import { CreatePost } from "./components/CreatePost"
 import { ViewSinglePost } from "./components/ViewSinglePost"
 import { FlashMessage } from "./components/FlashMessage"
+import { Profile } from "./components/Profile"
 
 axios.defaults.baseURL = "http://localhost:8080"
 
 function App() {
-    const { loggedIn } = useContext(stateContext)
+    const { user } = useLocalStorage()
 
     return (
         <BrowserRouter>
@@ -30,7 +31,10 @@ function App() {
 
             <Switch>
                 <Route exact path="/">
-                    {loggedIn ? <Home /> : <HomeGuest />}
+                    {user ? <Home /> : <HomeGuest />}
+                </Route>
+                <Route path="/profile/:username">
+                    <Profile />
                 </Route>
                 <Route path="/post/:id">
                     <ViewSinglePost />
