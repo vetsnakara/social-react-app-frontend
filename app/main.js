@@ -17,6 +17,7 @@ import { CreatePost } from "./components/CreatePost"
 import { ViewSinglePost } from "./components/ViewSinglePost"
 import { FlashMessage } from "./components/FlashMessage"
 import { Profile } from "./components/Profile"
+import { EditPost } from "./components/EditPost"
 
 axios.defaults.baseURL = "http://localhost:8080"
 
@@ -35,6 +36,9 @@ function App() {
                 </Route>
                 <Route path="/profile/:username">
                     <Profile />
+                </Route>
+                <Route path="/post/:id/edit">
+                    <EditPost />
                 </Route>
                 <Route path="/post/:id">
                     <ViewSinglePost />

@@ -47,6 +47,7 @@ export function ViewSinglePost() {
 
     const date = new Date(createdDate)
 
+    // todo: extract to utils
     const dateFormatted = `${
         date.getMonth() + 1
     }/${date.getDay()}/${date.getFullYear()}`
@@ -57,25 +58,25 @@ export function ViewSinglePost() {
                 <h2>{title}</h2>
 
                 <span className="pt-2">
-                    <a
+                    <Link
                         data-tip="Edit"
                         data-for="edit"
-                        href="#"
+                        to={`/post/${id}/edit`}
                         className="text-primary mr-2"
                     >
                         <i className="fas fa-edit"></i>
-                    </a>{" "}
-                    <a
+                    </Link>{" "}
+                    <Link
                         data-tip="Delete"
                         data-for="delete"
+                        to={`/post/${id}/delete`}
                         className="delete-post-button text-danger"
                         title="Delete"
                     >
                         <i className="fas fa-trash"></i>
-                    </a>
+                    </Link>
                 </span>
             </div>
-
             <p className="text-muted small mb-4">
                 <Link to={`/profile/${author.username}`}>
                     <img className="avatar-tiny" src={author.avatar} />
@@ -86,11 +87,9 @@ export function ViewSinglePost() {
                 </Link>{" "}
                 on {dateFormatted}
             </p>
-
             <div className="body-content">
                 <ReactMarkdown>{body}</ReactMarkdown>
             </div>
-
             <ReactTooltip id="edit" className="custom-tooltip" />
             <ReactTooltip id="delete" className="custom-tooltip" />
         </Page>
