@@ -1,16 +1,12 @@
-import React, { useEffect} from 'react';
+import React, { useEffect } from "react"
 
-import { Container } from './Container';
+import { Container } from "./Container"
 
-export const Page = ({children, title, wide}) => {
-  useEffect(() => {
-    document.title = `Social App | ${title}`;
-    window.scrollTo(0, 0);
-  }, []);
+export const Page = ({ children, title, wide }) => {
+    useEffect(() => {
+        document.title = `Social App | ${title}`
+        window.scrollTo(0, 0)
+    }, [title])
 
-  return (
-    <Container wide={wide}>
-      {children}
-    </Container>
-  );
+    return <Container wide={wide}>{children}</Container>
 }
