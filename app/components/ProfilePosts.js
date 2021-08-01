@@ -3,6 +3,8 @@ import axios from "axios"
 
 import { Link, useParams } from "react-router-dom"
 
+import { Loading } from "./Loading"
+
 export function ProfilePosts() {
     const { username } = useParams()
 
@@ -26,7 +28,7 @@ export function ProfilePosts() {
     }, [])
 
     if (isLoading) {
-        return <div>Loading ...</div>
+        return <Loading />
     }
 
     return (

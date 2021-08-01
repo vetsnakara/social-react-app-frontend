@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom"
 import axios from "axios"
 
 import { Page } from "./Page"
+import { Loading } from "./Loading"
 
 export function ViewSinglePost() {
     const { id } = useParams()
@@ -16,8 +17,6 @@ export function ViewSinglePost() {
                 const { data: post } = await axios.get(`/post/${id}`)
 
                 setPost(post)
-
-                console.log(post)
             } catch (error) {
                 console.log("There was a problem")
             } finally {
@@ -27,7 +26,11 @@ export function ViewSinglePost() {
     }, [])
 
     if (isLoading) {
-        return <Page title="...">Loading ...</Page>
+        return (
+            <Page title="...">
+                <Loading />
+            </Page>
+        )
     }
 
     const { title, body, author, createdDate } = post
