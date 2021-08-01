@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import ReactMarkdown from "react-markdown"
+import ReactTooltip from "react-tooltip"
 import axios from "axios"
 
 import { Page } from "./Page"
@@ -56,10 +57,17 @@ export function ViewSinglePost() {
                 <h2>{title}</h2>
 
                 <span className="pt-2">
-                    <a href="#" className="text-primary mr-2" title="Edit">
-                        <i className="fas fa-edit"></i>
-                    </a>
                     <a
+                        data-tip="Edit"
+                        data-for="edit"
+                        href="#"
+                        className="text-primary mr-2"
+                    >
+                        <i className="fas fa-edit"></i>
+                    </a>{" "}
+                    <a
+                        data-tip="Delete"
+                        data-for="delete"
                         className="delete-post-button text-danger"
                         title="Delete"
                     >
@@ -82,6 +90,9 @@ export function ViewSinglePost() {
             <div className="body-content">
                 <ReactMarkdown>{body}</ReactMarkdown>
             </div>
+
+            <ReactTooltip id="edit" className="custom-tooltip" />
+            <ReactTooltip id="delete" className="custom-tooltip" />
         </Page>
     )
 }
