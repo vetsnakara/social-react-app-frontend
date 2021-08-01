@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
+import ReactMarkdown from "react-markdown"
 import axios from "axios"
 
 import { Page } from "./Page"
@@ -12,9 +13,13 @@ export function ViewSinglePost() {
     const [post, setPost] = useState([])
 
     useEffect(() => {
+        const request = axios.CancelToken.source()
+
         ;(async function fetchPosts() {
             try {
-                const { data: post } = await axios.get(`/post/${id}`)
+                const { data: post } = await axios.get(`/post/${id}`, {
+                    cancelToken: request.token,
+                })
 
                 setPost(post)
             } catch (error) {
@@ -23,6 +28,10 @@ export function ViewSinglePost() {
                 setIsLoading(false)
             }
         })()
+
+        return () => {
+            request.cancel()
+        }
     }, [])
 
     if (isLoading) {
@@ -70,7 +79,9 @@ export function ViewSinglePost() {
                 on {dateFormatted}
             </p>
 
-            <div className="body-content">{body}</div>
+            <div className="body-content">
+                <ReactMarkdown>{body}</ReactMarkdown>
+            </div>
         </Page>
     )
 }

@@ -12,10 +12,13 @@ export function ProfilePosts() {
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
+        const request = axios.CancelToken.source()
+
         ;(async function fetchPosts() {
             try {
                 const { data: posts } = await axios.get(
-                    `/profile/${username}/posts`
+                    `/profile/${username}/posts`,
+                    { cancelToken: request.token }
                 )
 
                 setPosts(posts)
@@ -25,6 +28,8 @@ export function ProfilePosts() {
                 setIsLoading(false)
             }
         })()
+
+        return () => request.cancel()
     }, [])
 
     if (isLoading) {

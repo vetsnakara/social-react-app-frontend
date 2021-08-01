@@ -25,7 +25,7 @@ export function Profile() {
     } = useContext(stateContext)
 
     useEffect(() => {
-        async function fetchData() {
+        ;(async function fetchData() {
             try {
                 const { data } = await axios.post(`/profile/${username}`, {
                     token,
@@ -35,9 +35,7 @@ export function Profile() {
             } catch (error) {
                 console.log("There was a problem", error)
             }
-        }
-
-        fetchData()
+        })()
     }, [])
 
     const {
