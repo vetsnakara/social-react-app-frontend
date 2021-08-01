@@ -45,12 +45,16 @@ export function EditPost() {
                 break
             case "titleChange":
                 state.title.value = action.value
+                state.title.hasErrors = false
                 break
             case "bodyChange":
                 state.body.value = action.value
+                state.body.hasErrors = false
                 break
             case "submit":
-                state.sendCount++
+                if (!state.title.hasErrors && !state.body.hasErrors) {
+                    state.sendCount++
+                }
                 break
             case "saveRequestStarted":
                 state.saving = true
@@ -58,11 +62,25 @@ export function EditPost() {
             case "saveRequestFinished":
                 state.saving = false
                 break
+            case "titleRules":
+                state.title.hasErrors = !action.value.trim()
+                state.title.message = state.title.hasErrors
+                    ? "You must provide a title"
+                    : ""
+                break
+            case "bodyRules":
+                state.body.hasErrors = !action.value.trim()
+                state.body.message = state.body.hasErrors
+                    ? "You must provide a body"
+                    : ""
+                break
         }
     }
 
     function handleSubmit(e) {
         e.preventDefault()
+        dispatch({ type: "titleRules", value: state.title.value })
+        dispatch({ type: "bodyRules", value: state.body.value })
         dispatch({ type: "submit" })
     }
 
@@ -157,7 +175,18 @@ export function EditPost() {
                                 value: e.target.value,
                             })
                         }
+                        onBlur={(e) =>
+                            dispatch({
+                                type: "titleRules",
+                                value: e.target.value,
+                            })
+                        }
                     />
+                    {state.title.hasErrors && (
+                        <div className="alert alert-danger small liveValidateMessage">
+                            {state.title.message}
+                        </div>
+                    )}
                 </div>
 
                 <div className="form-group">
@@ -179,7 +208,18 @@ export function EditPost() {
                                 value: e.target.value,
                             })
                         }
+                        onBlur={(e) =>
+                            dispatch({
+                                type: "bodyRules",
+                                value: e.target.value,
+                            })
+                        }
                     ></textarea>
+                    {state.body.hasErrors && (
+                        <div className="alert alert-danger small liveValidateMessage">
+                            {state.body.message}
+                        </div>
+                    )}
                 </div>
 
                 <button className="btn btn-primary" disabled={state.saving}>
