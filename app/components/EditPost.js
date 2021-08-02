@@ -1,6 +1,7 @@
 // todo: markdown preview when create/edit post
 
 import React, { useState, useEffect, useCallback, useContext } from "react"
+import { Link, Redirect } from "react-router-dom"
 import { useParams } from "react-router"
 import { useImmerReducer } from "use-immer"
 import axios from "axios"
@@ -9,6 +10,7 @@ import { stateContext } from "./StateProvider"
 import { dispatchContext } from "./StateProvider"
 
 import { Page } from "./Page"
+import { NotFound } from "./NotFound"
 import { Loading } from "./Loading"
 
 export function EditPost() {
@@ -32,6 +34,8 @@ export function EditPost() {
         saving: false,
         id,
         sendCount: 0,
+        notFound: false,
+        permissionProblem: false,
     }
 
     const [state, dispatch] = useImmerReducer(reducer, origState)
@@ -42,6 +46,9 @@ export function EditPost() {
                 state.title.value = action.value.title
                 state.body.value = action.value.body
                 state.loading = false
+                if (!user || user.username !== action.value.author.username) {
+                    state.permissionProblem = true
+                }
                 break
             case "titleChange":
                 state.title.value = action.value
@@ -74,6 +81,9 @@ export function EditPost() {
                     ? "You must provide a body"
                     : ""
                 break
+            case "notFound":
+                state.notFound = true
+                break
         }
     }
 
@@ -93,7 +103,11 @@ export function EditPost() {
                     cancelToken: request.token,
                 })
 
-                dispatch({ type: "fetchComplete", value: post })
+                if (post) {
+                    dispatch({ type: "fetchComplete", value: post })
+                } else {
+                    dispatch({ type: "notFound" })
+                }
             } catch (error) {
                 console.log("There was a problem")
             } finally {
@@ -143,7 +157,24 @@ export function EditPost() {
         }
     }, [state.sendCount])
 
-    const { loading, title, body } = state
+    useEffect(() => {
+        if (state.permissionProblem === true) {
+            appDispatch({
+                type: "flashMessage",
+                value: "You have no permissions to edit this post",
+            })
+        }
+    }, [state.permissionProblem])
+
+    const { loading, notFound, permissionProblem, title, body } = state
+
+    if (notFound) {
+        return <NotFound />
+    }
+
+    if (permissionProblem) {
+        return <Redirect to="/" />
+    }
 
     if (loading) {
         return (
@@ -155,7 +186,11 @@ export function EditPost() {
 
     return (
         <Page title="Edit post">
-            <form onSubmit={handleSubmit}>
+            <Link to={`/post/${id}`} className="small font-weight-bold">
+                &laquo; Back to post
+            </Link>
+
+            <form className="mt-3" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="post-title" className="text-muted mb-1">
                         <small>Title</small>

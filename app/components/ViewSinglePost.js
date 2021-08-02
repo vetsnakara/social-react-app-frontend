@@ -5,6 +5,7 @@ import ReactTooltip from "react-tooltip"
 import axios from "axios"
 
 import { Page } from "./Page"
+import { NotFound } from "./NotFound"
 import { Loading } from "./Loading"
 
 export function ViewSinglePost() {
@@ -34,6 +35,10 @@ export function ViewSinglePost() {
             request.cancel()
         }
     }, [])
+
+    if (!isLoading && !post) {
+        return <NotFound />
+    }
 
     if (isLoading) {
         return (

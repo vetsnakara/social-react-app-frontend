@@ -18,6 +18,7 @@ import { ViewSinglePost } from "./components/ViewSinglePost"
 import { FlashMessage } from "./components/FlashMessage"
 import { Profile } from "./components/Profile"
 import { EditPost } from "./components/EditPost"
+import { NotFound } from "./components/NotFound"
 
 axios.defaults.baseURL = "http://localhost:8080"
 
@@ -51,6 +52,9 @@ function App() {
                 </Route>
                 <Route path="/create-post">
                     <CreatePost />
+                </Route>
+                <Route>
+                    <NotFound />
                 </Route>
             </Switch>
 
