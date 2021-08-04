@@ -19,11 +19,12 @@ import { FlashMessage } from "./components/FlashMessage"
 import { Profile } from "./components/Profile"
 import { EditPost } from "./components/EditPost"
 import { NotFound } from "./components/NotFound"
+import { Search } from "./components/Search"
 
 axios.defaults.baseURL = "http://localhost:8080"
 
 function App() {
-    const { user } = useLocalStorage()
+    const { user, isSearchOpen } = useLocalStorage()
 
     return (
         <BrowserRouter>
@@ -57,8 +58,8 @@ function App() {
                     <NotFound />
                 </Route>
             </Switch>
-
             <Footer />
+            {isSearchOpen && <Search />}
         </BrowserRouter>
     )
 }

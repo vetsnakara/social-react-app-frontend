@@ -10,6 +10,7 @@ const initState = {
     redirectUrl: null,
     flashMessages: [],
     user: JSON.parse(localStorage.getItem("user")),
+    isSearchOpen: false,
 }
 
 export function StateProvider({ children }) {

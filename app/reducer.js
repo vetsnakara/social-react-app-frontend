@@ -9,5 +9,11 @@ export function appReducer(draft, action) {
         case "flashMessage":
             draft.flashMessages.push(action.value)
             break
+        case "openSearch":
+            draft.isSearchOpen = true
+            break
+        case "closeSearch":
+            draft.isSearchOpen = false
+            break
     }
 }
