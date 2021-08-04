@@ -1,15 +1,24 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useImmer } from "use-immer"
-import { useParams } from "react-router"
+import {
+    useParams,
+    useRouteMatch,
+    NavLink,
+    Switch,
+    Route,
+} from "react-router-dom"
 import axios from "axios"
 
 import { stateContext } from "./StateProvider"
 
 import { Page } from "./Page"
 import { ProfilePosts } from "./ProfilePosts"
+import { ProfileFollowers } from "./ProfileFollowers"
+import { ProfileFollowing } from "./ProfileFollowing"
 
 export function Profile() {
     const { username } = useParams()
+    const { path } = useRouteMatch()
 
     const { user } = useContext(stateContext)
 
@@ -181,18 +190,38 @@ export function Profile() {
             </h2>
 
             <div className="profile-nav nav nav-tabs pt-2 mb-4">
-                <a href="#" className="active nav-item nav-link">
+                <NavLink
+                    exact
+                    to={`/profile/${username}`}
+                    className="nav-item nav-link"
+                >
                     Posts: {postCount}
-                </a>
-                <a href="#" className="nav-item nav-link">
+                </NavLink>
+                <NavLink
+                    to={`/profile/${username}/followers`}
+                    className="nav-item nav-link"
+                >
                     Followers: {followerCount}
-                </a>
-                <a href="#" className="nav-item nav-link">
+                </NavLink>
+                <NavLink
+                    to={`/profile/${username}/following`}
+                    className="nav-item nav-link"
+                >
                     Following: {followingCount}
-                </a>
+                </NavLink>
             </div>
 
-            <ProfilePosts />
+            <Switch>
+                <Route exact path={path}>
+                    <ProfilePosts />
+                </Route>
+                <Route path={`${path}/followers`}>
+                    <ProfileFollowers />
+                </Route>
+                <Route path={`${path}/following`}>
+                    <ProfileFollowing />
+                </Route>
+            </Switch>
         </Page>
     )
 }

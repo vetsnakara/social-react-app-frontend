@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { useRouteMatch } from "react-router"
 import axios from "axios"
 
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useRouteMatch } from "react-router-dom"
 
 import { Loading } from "./Loading"
 
-export function ProfilePosts() {
+export function ProfileFollowers() {
     const { username } = useParams()
     const { url } = useRouteMatch()
 
@@ -18,7 +17,7 @@ export function ProfilePosts() {
 
         ;(async function fetchPosts() {
             try {
-                const { data: posts } = await axios.get(`${url}/posts`, {
+                const { data: posts } = await axios.get(url, {
                     cancelToken: request.token,
                 })
 
@@ -39,24 +38,15 @@ export function ProfilePosts() {
 
     return (
         <div className="list-group">
-            {posts.map(({ _id: id, createdDate, avatar, title, author }) => {
-                const date = new Date(createdDate)
-
-                const dateFormatted = `${
-                    date.getMonth() + 1
-                }/${date.getDay()}/${date.getFullYear()}`
-
+            {posts.map((follower, index) => {
                 return (
                     <Link
-                        key={id}
-                        to={`/post/${id}`}
+                        key={index}
+                        to={`/profile/${follower.username}`}
                         className="list-group-item list-group-item-action"
                     >
-                        <img className="avatar-tiny" src={author.avatar} />{" "}
-                        <strong>{title}</strong>{" "}
-                        <span className="text-muted small">
-                            on {dateFormatted}
-                        </span>
+                        <img className="avatar-tiny" src={follower.avatar} />{" "}
+                        {follower.username}
                     </Link>
                 )
             })}
