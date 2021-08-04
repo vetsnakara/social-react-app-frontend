@@ -7,6 +7,7 @@ import { useImmer } from "use-immer"
 import axios from "axios"
 
 import { dispatchContext } from "./StateProvider"
+import { Post } from "./Post"
 
 export function Search() {
     const dispatch = useContext(dispatchContext)
@@ -137,44 +138,15 @@ export function Search() {
                                     <strong>Search Results</strong> (
                                     {state.results.length} items found)
                                 </div>
-                                {state.results.map(
-                                    ({
-                                        _id: id,
-                                        createdDate,
-                                        avatar,
-                                        title,
-                                        author,
-                                    }) => {
-                                        const date = new Date(createdDate)
-
-                                        const dateFormatted = `${
-                                            date.getMonth() + 1
-                                        }/${date.getDay()}/${date.getFullYear()}`
-
-                                        return (
-                                            <Link
-                                                key={id}
-                                                to={`/post/${id}`}
-                                                className="list-group-item list-group-item-action"
-                                                onClick={() =>
-                                                    dispatch({
-                                                        type: "closeSearch",
-                                                    })
-                                                }
-                                            >
-                                                <img
-                                                    className="avatar-tiny"
-                                                    src={author.avatar}
-                                                />{" "}
-                                                <strong>{title}</strong>{" "}
-                                                <span className="text-muted small">
-                                                    by {author.username} on{" "}
-                                                    {dateFormatted}
-                                                </span>
-                                            </Link>
-                                        )
-                                    }
-                                )}
+                                {state.results.map((post) => (
+                                    <Post
+                                        key={post._id}
+                                        post={post}
+                                        onClick={() =>
+                                            dispatch({ type: "closeSearch" })
+                                        }
+                                    />
+                                ))}
                             </div>
                         )}
 

@@ -5,6 +5,7 @@ import axios from "axios"
 import { Link, useParams } from "react-router-dom"
 
 import { Loading } from "./Loading"
+import { Post } from "./Post"
 
 export function ProfilePosts() {
     const { username } = useParams()
@@ -39,27 +40,9 @@ export function ProfilePosts() {
 
     return (
         <div className="list-group">
-            {posts.map(({ _id: id, createdDate, avatar, title, author }) => {
-                const date = new Date(createdDate)
-
-                const dateFormatted = `${
-                    date.getMonth() + 1
-                }/${date.getDay()}/${date.getFullYear()}`
-
-                return (
-                    <Link
-                        key={id}
-                        to={`/post/${id}`}
-                        className="list-group-item list-group-item-action"
-                    >
-                        <img className="avatar-tiny" src={author.avatar} />{" "}
-                        <strong>{title}</strong>{" "}
-                        <span className="text-muted small">
-                            on {dateFormatted}
-                        </span>
-                    </Link>
-                )
-            })}
+            {posts.map((post) => (
+                <Post noAuthor key={post._id} post={post} />
+            ))}
         </div>
     )
 }
