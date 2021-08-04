@@ -37,6 +37,7 @@ export function HeaderLoggedIn() {
                 data-for="chat"
                 data-tip="Chat"
                 className="mr-2 header-chat-icon text-white"
+                onClick={() => dispatch({ type: "toggleChat" })}
             >
                 <i className="fas fa-comment"></i>
                 <span className="chat-count-badge text-white"> </span>

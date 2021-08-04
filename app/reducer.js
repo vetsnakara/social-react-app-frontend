@@ -15,5 +15,8 @@ export function appReducer(draft, action) {
         case "closeSearch":
             draft.isSearchOpen = false
             break
+        case "toggleChat":
+            draft.isChatOpen = !draft.isChatOpen
+            break
     }
 }

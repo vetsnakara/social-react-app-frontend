@@ -11,6 +11,7 @@ const initState = {
     flashMessages: [],
     user: JSON.parse(localStorage.getItem("user")),
     isSearchOpen: false,
+    isChatOpen: false,
 }
 
 export function StateProvider({ children }) {

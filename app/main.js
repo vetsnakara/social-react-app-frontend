@@ -21,6 +21,7 @@ import { Profile } from "./components/Profile"
 import { EditPost } from "./components/EditPost"
 import { NotFound } from "./components/NotFound"
 import { Search } from "./components/Search"
+import { Chat } from "./components/Chat"
 
 axios.defaults.baseURL = "http://localhost:8080"
 
@@ -59,6 +60,9 @@ function App() {
                     <NotFound />
                 </Route>
             </Switch>
+
+            <Chat />
+
             <Footer />
 
             <CSSTransition
