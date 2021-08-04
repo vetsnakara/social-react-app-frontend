@@ -42,7 +42,7 @@ export function ViewSinglePost() {
         return () => {
             request.cancel()
         }
-    }, [])
+    }, [id])
 
     useEffect(() => {
         if (isDeletedConfirmed) {

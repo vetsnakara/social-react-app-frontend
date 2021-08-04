@@ -22,7 +22,6 @@ export function CreatePost({ onCreate }) {
         e.preventDefault()
 
         try {
-            console.log(title, body, token)
             const { data: postId } = await axios.post("/create-post", {
                 title,
                 body,

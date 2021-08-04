@@ -1,11 +1,22 @@
 // todo add open overlay on key combination
 
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import { useImmer } from "use-immer"
+
+import axios from "axios"
 
 import { dispatchContext } from "./StateProvider"
 
 export function Search() {
     const dispatch = useContext(dispatchContext)
+
+    const [state, setState] = useImmer({
+        searchTerm: "",
+        results: [],
+        show: "neither",
+        requestCount: 0,
+    })
 
     useEffect(() => {
         document.addEventListener("keydown", searchKeyPressHandler)
@@ -13,8 +24,63 @@ export function Search() {
             document.removeEventListener("keydown", searchKeyPressHandler)
     }, [])
 
+    useEffect(() => {
+        if (state.searchTerm.trim()) {
+            setState((state) => {
+                state.show = "loading"
+            })
+
+            const delay = setTimeout(() => {
+                setState((state) => {
+                    state.requestCount++
+                })
+            }, 500)
+
+            return () => clearTimeout(delay)
+        }
+    }, [state.searchTerm])
+
+    useEffect(() => {
+        if (state.requestCount > 0) {
+            const request = axios.CancelToken.source()
+            ;(async function fetchResults() {
+                try {
+                    const { data } = await axios.post(
+                        "/search",
+                        {
+                            searchTerm: state.searchTerm,
+                        },
+                        {
+                            cancelToken: request.token,
+                        }
+                    )
+
+                    setState((state) => {
+                        state.results = data
+                        state.show = "results"
+                    })
+                } catch (error) {
+                    setState((state) => {
+                        state.show = "neither"
+                    })
+
+                    console.log("Error is occured", error)
+                }
+            })()
+
+            return () => request.cancel()
+        }
+    }, [state.requestCount])
+
     function searchKeyPressHandler({ keyCode }) {
         if (keyCode === 27) dispatch({ type: "closeSearch" })
+    }
+
+    function handleInput(e) {
+        const { value } = e.target
+        setState((state) => {
+            state.searchTerm = value
+        })
     }
 
     return (
@@ -34,6 +100,8 @@ export function Search() {
                         id="live-search-field"
                         className="live-search-field"
                         placeholder="What are you interested in?"
+                        value={state.searchTerm}
+                        onChange={handleInput}
                     />
                     <span
                         onClick={() => dispatch({ type: "closeSearch" })}
@@ -46,51 +114,75 @@ export function Search() {
 
             <div className="search-overlay-bottom">
                 <div className="container container--narrow py-3">
-                    <div className="live-search-results live-search-results--visible">
-                        <div className="list-group shadow-sm">
-                            <div className="list-group-item active">
-                                <strong>Search Results</strong> (3 items found)
+                    <div
+                        className={
+                            "circle-loader " +
+                            (state.show == "loading"
+                                ? "circle-loader--visible"
+                                : "")
+                        }
+                    ></div>
+
+                    <div
+                        className={
+                            "live-search-results " +
+                            (state.show == "results"
+                                ? "live-search-results--visible"
+                                : "")
+                        }
+                    >
+                        {Boolean(state.results.length) && (
+                            <div className="list-group shadow-sm">
+                                <div className="list-group-item active">
+                                    <strong>Search Results</strong> (
+                                    {state.results.length} items found)
+                                </div>
+                                {state.results.map(
+                                    ({
+                                        _id: id,
+                                        createdDate,
+                                        avatar,
+                                        title,
+                                        author,
+                                    }) => {
+                                        const date = new Date(createdDate)
+
+                                        const dateFormatted = `${
+                                            date.getMonth() + 1
+                                        }/${date.getDay()}/${date.getFullYear()}`
+
+                                        return (
+                                            <Link
+                                                key={id}
+                                                to={`/post/${id}`}
+                                                className="list-group-item list-group-item-action"
+                                                onClick={() =>
+                                                    dispatch({
+                                                        type: "closeSearch",
+                                                    })
+                                                }
+                                            >
+                                                <img
+                                                    className="avatar-tiny"
+                                                    src={author.avatar}
+                                                />{" "}
+                                                <strong>{title}</strong>{" "}
+                                                <span className="text-muted small">
+                                                    by {author.username} on{" "}
+                                                    {dateFormatted}
+                                                </span>
+                                            </Link>
+                                        )
+                                    }
+                                )}
                             </div>
-                            <a
-                                href="#"
-                                className="list-group-item list-group-item-action"
-                            >
-                                <img
-                                    className="avatar-tiny"
-                                    src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128"
-                                />{" "}
-                                <strong>Example Post #1</strong>
-                                <span className="text-muted small">
-                                    by brad on 2/10/2020{" "}
-                                </span>
-                            </a>
-                            <a
-                                href="#"
-                                className="list-group-item list-group-item-action"
-                            >
-                                <img
-                                    className="avatar-tiny"
-                                    src="https://gravatar.com/avatar/b9216295c1e3931655bae6574ac0e4c2?s=128"
-                                />{" "}
-                                <strong>Example Post #2</strong>
-                                <span className="text-muted small">
-                                    by barksalot on 2/10/2020{" "}
-                                </span>
-                            </a>
-                            <a
-                                href="#"
-                                className="list-group-item list-group-item-action"
-                            >
-                                <img
-                                    className="avatar-tiny"
-                                    src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128"
-                                />{" "}
-                                <strong>Example Post #3</strong>
-                                <span className="text-muted small">
-                                    by brad on 2/10/2020{" "}
-                                </span>
-                            </a>
-                        </div>
+                        )}
+
+                        {!Boolean(state.results.length) && (
+                            <p className="alert alert-danger text-center shadow-sm">
+                                Sorry, can not find posts =(
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
