@@ -1,5 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import { CSSTransition } from "react-transition-group"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 
 import axios from "axios"
@@ -59,7 +60,15 @@ function App() {
                 </Route>
             </Switch>
             <Footer />
-            {isSearchOpen && <Search />}
+
+            <CSSTransition
+                timeout={330}
+                in={isSearchOpen}
+                classNames="search-overlay"
+                unmountOnExit
+            >
+                <Search />
+            </CSSTransition>
         </BrowserRouter>
     )
 }
