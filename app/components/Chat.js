@@ -1,6 +1,7 @@
 // todo: use hotkey to open/close chat
 
 import React, { useContext, useEffect, useRef } from "react"
+import { Link } from "react-router-dom"
 import { useImmer } from "use-immer"
 import { io } from "socket.io-client"
 
@@ -9,6 +10,9 @@ import { stateContext, dispatchContext } from "./StateProvider"
 const socket = io("http://localhost:8080")
 
 export function Chat() {
+    const inputRef = useRef(null)
+    const chatLogRef = useRef(null)
+
     const { user, isChatOpen } = useContext(stateContext)
     const dispatch = useContext(dispatchContext)
 
@@ -17,27 +21,43 @@ export function Chat() {
         chatMessages: [],
     })
 
-    const inputRef = useRef(null)
-
     const classes = `chat-wrapper shadow border-top border-left border-right ${
         isChatOpen ? "chat-wrapper--is-visible" : ""
     }`
 
     useEffect(() => {
+        // focus on input
         if (isChatOpen) {
             inputRef.current.focus()
         }
+
+        // clear unread chat messages
+        dispatch({ type: "clearUnreadChatCount" })
     }, [isChatOpen])
 
     useEffect(() => {
-        socket.on("chatFromServer", (message) => {
+        socket.on("chatFromServer", handleRecieveMessage)
+
+        return () => socket.off("chatFromServer", handleRecieveMessage)
+
+        function handleRecieveMessage(message) {
             setState((state) => {
                 state.chatMessages.push(message)
             })
-        })
-
-        return () => {}
+        }
     }, [])
+
+    useEffect(() => {
+        // scroll messages to bottom
+        const el = chatLogRef.current
+        const height = el.scrollHeight
+        el.scrollTop = height
+
+        // update unread chat messages
+        if (state.chatMessages.length && !isChatOpen) {
+            dispatch({ type: "incrementUnreadChatCount" })
+        }
+    }, [state.chatMessages])
 
     function handleFieldChange(e) {
         setState((state) => {
@@ -76,7 +96,7 @@ export function Chat() {
                     <i className="fas fa-times-circle"></i>
                 </span>
             </div>
-            <div id="chat" className="chat-log">
+            <div ref={chatLogRef} id="chat" className="chat-log">
                 {state.chatMessages.map((message, index) => {
                     if (message.username === user.username) {
                         return (
@@ -96,17 +116,17 @@ export function Chat() {
 
                     return (
                         <div key={index} className="chat-other">
-                            <a href="#">
+                            <Link to={`/profile/${message.username}`}>
                                 <img
                                     className="avatar-tiny"
                                     src={message.avatar}
                                 />
-                            </a>
+                            </Link>
                             <div className="chat-message">
                                 <div className="chat-message-inner">
-                                    <a href="#">
+                                    <Link to={`/profile/${message.username}`}>
                                         <strong>{message.username}:</strong>
-                                    </a>{" "}
+                                    </Link>{" "}
                                     {message.message}
                                 </div>
                             </div>

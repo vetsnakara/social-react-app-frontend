@@ -11,6 +11,7 @@ export function HeaderLoggedIn() {
 
     const {
         user: { avatar, username },
+        unreadChatCount,
     } = useContext(stateContext)
 
     function handleLogout() {
@@ -36,11 +37,17 @@ export function HeaderLoggedIn() {
             <span
                 data-for="chat"
                 data-tip="Chat"
-                className="mr-2 header-chat-icon text-white"
+                className={`mr-2 header-chat-icon ${
+                    unreadChatCount ? "text-danger" : "text-white"
+                }`}
                 onClick={() => dispatch({ type: "toggleChat" })}
             >
                 <i className="fas fa-comment"></i>
-                <span className="chat-count-badge text-white"> </span>
+                {unreadChatCount ? (
+                    <span className="chat-count-badge text-white">
+                        {unreadChatCount < 10 ? unreadChatCount : "9+"}
+                    </span>
+                ) : null}
             </span>{" "}
             <Link
                 to={`/profile/${username}`}

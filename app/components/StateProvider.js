@@ -12,6 +12,7 @@ const initState = {
     user: JSON.parse(localStorage.getItem("user")),
     isSearchOpen: false,
     isChatOpen: false,
+    unreadChatCount: 0,
 }
 
 export function StateProvider({ children }) {

@@ -18,5 +18,11 @@ export function appReducer(draft, action) {
         case "toggleChat":
             draft.isChatOpen = !draft.isChatOpen
             break
+        case "incrementUnreadChatCount":
+            draft.unreadChatCount++
+            break
+        case "clearUnreadChatCount":
+            draft.unreadChatCount = 0
+            break
     }
 }
