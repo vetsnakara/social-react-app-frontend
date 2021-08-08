@@ -20,8 +20,16 @@ export const LoginForm = () => {
 
             if (data) {
                 dispatch({ type: "login", value: data })
+                dispatch({
+                    type: "flashMessage",
+                    value: "You have successfully logged in!",
+                })
             } else {
                 console.log("Incorrect username or password")
+                dispatch({
+                    type: "flashMessage",
+                    value: "Invalid username or password",
+                })
             }
         } catch (error) {
             console.log("There was a problem", error)

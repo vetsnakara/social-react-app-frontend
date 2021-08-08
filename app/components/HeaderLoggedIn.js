@@ -16,6 +16,10 @@ export function HeaderLoggedIn() {
 
     function handleLogout() {
         dispatch({ type: "logout" })
+        dispatch({
+            type: "flashMessage",
+            value: "You have successfully logged out!",
+        })
     }
 
     function handleSearch(e) {
