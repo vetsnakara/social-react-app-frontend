@@ -1,11 +1,15 @@
-import React from "react"
+import React, { useContext, useEffect } from "react"
 import ReactDOM from "react-dom"
 import { CSSTransition } from "react-transition-group"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 
 import axios from "axios"
 
-import { StateProvider } from "./components/StateProvider"
+import {
+    StateProvider,
+    stateContext,
+    dispatchContext,
+} from "./components/StateProvider"
 import { useLocalStorage } from "./hooks/useLocalStorage"
 
 import { Header } from "./components/Header"
@@ -26,7 +30,42 @@ import { Chat } from "./components/Chat"
 axios.defaults.baseURL = "http://localhost:8080"
 
 function App() {
-    const { user, isSearchOpen } = useLocalStorage()
+    useLocalStorage()
+
+    const { user, isSearchOpen } = useContext(stateContext)
+    const dispatch = useContext(dispatchContext)
+
+    // check if token is expired or not
+    useEffect(() => {
+        if (user) {
+            const request = axios.CancelToken.source()
+            ;(async function () {
+                try {
+                    const { data: isTokenValid } = await axios.post(
+                        "/checkToken",
+                        {
+                            token: user.token,
+                        },
+                        {
+                            cancelToken: request.token,
+                        }
+                    )
+
+                    if (!isTokenValid) {
+                        dispatch({ type: "logout" })
+                        dispatch({
+                            type: "flashMessage",
+                            value: "You session has expired. Please log in again",
+                        })
+                    }
+                } catch (error) {
+                    console.log("Error is occured", error)
+                }
+            })()
+
+            return () => request.cancel()
+        }
+    }, [])
 
     return (
         <BrowserRouter>

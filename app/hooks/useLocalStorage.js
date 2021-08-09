@@ -3,9 +3,7 @@ import { useContext, useEffect } from "react"
 import { stateContext } from "../components/StateProvider"
 
 export function useLocalStorage() {
-    const state = useContext(stateContext)
-
-    const { user } = state
+    const { user } = useContext(stateContext)
 
     useEffect(() => {
         if (user) {
@@ -14,6 +12,4 @@ export function useLocalStorage() {
             localStorage.removeItem("user")
         }
     }, [user])
-
-    return state
 }
