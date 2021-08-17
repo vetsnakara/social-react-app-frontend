@@ -7,9 +7,9 @@ import { io } from "socket.io-client"
 
 import { stateContext, dispatchContext } from "./StateProvider"
 
-const socket = io("http://localhost:8080")
-
 export function Chat() {
+    const socket = useRef(null)
+
     const inputRef = useRef(null)
     const chatLogRef = useRef(null)
 
@@ -36,9 +36,11 @@ export function Chat() {
     }, [isChatOpen])
 
     useEffect(() => {
-        socket.on("chatFromServer", handleRecieveMessage)
+        socket.current = io("http://localhost:8080")
 
-        return () => socket.off("chatFromServer", handleRecieveMessage)
+        socket.current.on("chatFromServer", handleRecieveMessage)
+
+        return () => socket.current.off("chatFromServer", handleRecieveMessage)
 
         function handleRecieveMessage(message) {
             setState((state) => {
@@ -70,7 +72,7 @@ export function Chat() {
         e.preventDefault()
 
         // send message to chat server
-        socket.emit("chatFromBrowser", {
+        socket.current.emit("chatFromBrowser", {
             message: state.fieldValue,
             token: user.token,
         })

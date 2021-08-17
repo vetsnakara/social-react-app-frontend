@@ -85,7 +85,7 @@ export function Search() {
     }
 
     return (
-        <div className="search-overlay">
+        <>
             <div className="search-overlay-top shadow-sm">
                 <div className="container container--narrow">
                     <label
@@ -158,6 +158,6 @@ export function Search() {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
