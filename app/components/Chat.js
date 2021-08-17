@@ -36,7 +36,7 @@ export function Chat() {
     }, [isChatOpen])
 
     useEffect(() => {
-        socket.current = io("http://localhost:8080")
+        socket.current = io("https://social-react-app-123.herokuapp.com")
 
         socket.current.on("chatFromServer", handleRecieveMessage)
 
