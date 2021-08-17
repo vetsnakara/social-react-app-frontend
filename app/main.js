@@ -26,6 +26,8 @@ import { Loading } from "./components/Loading"
 
 axios.defaults.baseURL = process.env.BACKURL || ""
 
+console.log("baseUrl", process.env.BACKURL)
+
 const CreatePost = React.lazy(() =>
     import("./components/CreatePost").then((m) => ({ default: m.CreatePost }))
 )
@@ -44,7 +46,7 @@ const Chat = React.lazy(() =>
     import("./components/Chat").then((m) => ({ default: m.Chat }))
 )
 
-function App() {
+function App({ is }) {
     useLocalStorage()
 
     const { user, isSearchOpen } = useContext(stateContext)
