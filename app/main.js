@@ -24,6 +24,8 @@ import { EditPost } from "./components/EditPost"
 import { NotFound } from "./components/NotFound"
 import { Loading } from "./components/Loading"
 
+axios.defaults.baseURL = process.env.BACKURL || ""
+
 const CreatePost = React.lazy(() =>
     import("./components/CreatePost").then((m) => ({ default: m.CreatePost }))
 )
@@ -41,8 +43,6 @@ const Search = React.lazy(() =>
 const Chat = React.lazy(() =>
     import("./components/Chat").then((m) => ({ default: m.Chat }))
 )
-
-axios.defaults.baseURL = "http://localhost:8080"
 
 function App() {
     useLocalStorage()
