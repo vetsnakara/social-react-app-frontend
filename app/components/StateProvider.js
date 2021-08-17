@@ -6,10 +6,14 @@ import { appReducer } from "../reducer"
 const stateContext = createContext()
 const dispatchContext = createContext()
 
+const user =
+    typeof window !== "undefined"
+        ? JSON.parse(localStorage.getItem("user"))
+        : null
+
 const initState = {
     redirectUrl: null,
     flashMessages: [],
-    user: JSON.parse(localStorage.getItem("user")),
     isSearchOpen: false,
     isChatOpen: false,
     unreadChatCount: 0,

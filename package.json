@@ -4,9 +4,11 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "webpack serve",
-        "webpackBuild": "webpack",
-        "previewDist": "node previewDist"
+        "dev": "npm run generateHtml && webpack serve",
+        "webpackBuild": "npm run generateHtml && webpack",
+        "previewDist": "node previewDist",
+        "transpileGenerateHtml": "webpack --config webpack.ssr.config.js",
+        "generateHtml": "npm run transpileGenerateHtml && node generateHtml.js"
     },
     "keywords": [],
     "author": "",

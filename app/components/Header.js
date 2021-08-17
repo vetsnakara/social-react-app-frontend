@@ -6,8 +6,10 @@ import { HeaderLoggedIn } from "./HeaderLoggedIn"
 
 import { stateContext } from "./StateProvider"
 
-export function Header() {
+export function Header({ staticEmpty = false }) {
     const { user } = useContext(stateContext)
+
+    const content = user ? <HeaderLoggedIn /> : <LoginForm />
 
     return (
         <header className="header-bar bg-primary mb-3">
@@ -17,7 +19,7 @@ export function Header() {
                         ComplexApp
                     </Link>
                 </h4>
-                {user ? <HeaderLoggedIn /> : <LoginForm />}
+                {!staticEmpty && content}
             </div>
         </header>
     )
