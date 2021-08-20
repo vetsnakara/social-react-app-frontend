@@ -17,6 +17,7 @@ const initState = {
     isSearchOpen: false,
     isChatOpen: false,
     unreadChatCount: 0,
+    user,
 }
 
 export function StateProvider({ children }) {
